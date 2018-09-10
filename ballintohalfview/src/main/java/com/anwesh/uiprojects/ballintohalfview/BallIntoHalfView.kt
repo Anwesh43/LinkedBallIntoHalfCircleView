@@ -4,6 +4,7 @@ package com.anwesh.uiprojects.ballintohalfview
  * Created by anweshmishra on 10/09/18.
  */
 
+import android.app.Activity
 import android.view.View
 import android.view.MotionEvent
 import android.content.Context
@@ -187,6 +188,14 @@ class BallIntoHalfView(ctx : Context) : View(ctx) {
             bih.startUpdating {
                 animator.start()
             }
+        }
+    }
+
+    companion object {
+        fun create(activity : Activity) : BallIntoHalfView {
+            val view : BallIntoHalfView = BallIntoHalfView(activity)
+            activity.setContentView(view)
+            return view
         }
     }
 }
