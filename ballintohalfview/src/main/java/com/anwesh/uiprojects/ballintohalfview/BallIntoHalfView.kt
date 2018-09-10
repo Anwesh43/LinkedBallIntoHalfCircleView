@@ -166,4 +166,25 @@ class BallIntoHalfView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    data class Renderer(var view : BallIntoHalfView) {
+        private val animator : Animator = Animator(view)
+        private val bih : BallIntoHalf = BallIntoHalf(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#BDBDBD"))
+            bih.draw(canvas, paint)
+            animator.animate {
+                bih.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            bih.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
