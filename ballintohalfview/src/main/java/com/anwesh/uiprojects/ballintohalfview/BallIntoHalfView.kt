@@ -9,8 +9,32 @@ import android.view.MotionEvent
 import android.content.Context
 import android.graphics.Paint
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.RectF
 
 val nodes : Int = 5
+
+fun Canvas.drawBIHNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = h / (nodes + 1)
+    val r : Float = gap / 3
+    val sc1 : Float = Math.min(0.5f, scale) * 2
+    val sc2 : Float = Math.min(0.5f, Math.max(0f, scale - 0.5f)) * 2
+    val arcR : Float = r * sc1
+    paint.color = Color.parseColor("#283593")
+    save()
+    translate(w/2, gap + i * gap)
+    for (j in 0..1) {
+        val sf : Float = 1f - 2 * (i % 2)
+        save()
+        translate((w - r) * sf * sc2, 0f)
+        rotate(180f * sc2)
+        drawArc(RectF(-arcR, -arcR, arcR, arcR), 90f * sf, 180f,true, paint)
+        restore()
+    }
+    restore()
+}
 
 class BallIntoHalfView(ctx : Context) : View(ctx) {
 
@@ -32,7 +56,7 @@ class BallIntoHalfView(ctx : Context) : View(ctx) {
     data class State(var scale : Float = 0f, var prevScale : Float = 0f, var dir : Float = 0f) {
 
         fun update(cb : (Float) -> Unit) {
-            scale += 0.1f * dir
+            scale += 0.05f * dir
             if (Math.abs(scale - prevScale) > 1) {
                 scale = prevScale + dir
                 dir = 0f
