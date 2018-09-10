@@ -23,13 +23,15 @@ fun Canvas.drawBIHNode(i : Int, scale : Float, paint : Paint) {
     val sc1 : Float = Math.min(0.5f, scale) * 2
     val sc2 : Float = Math.min(0.5f, Math.max(0f, scale - 0.5f)) * 2
     val arcR : Float = r * sc1
+    paint.strokeWidth = Math.min(w, h) / 90
+    paint.style = Paint.Style.FILL_AND_STROKE
     paint.color = Color.parseColor("#283593")
     save()
     translate(w/2, gap + i * gap)
     for (j in 0..1) {
-        val sf : Float = 1f - 2 * (i % 2)
+        val sf : Float = 1f - 2 * (j % 2)
         save()
-        translate((w - r) * sf * sc2, 0f)
+        translate((w/2 - r) * sf * sc2, 0f)
         rotate(180f * sc2)
         drawArc(RectF(-arcR, -arcR, arcR, arcR), 90f * sf, 180f,true, paint)
         restore()
@@ -59,7 +61,7 @@ class BallIntoHalfView(ctx : Context) : View(ctx) {
     data class State(var scale : Float = 0f, var prevScale : Float = 0f, var dir : Float = 0f) {
 
         fun update(cb : (Float) -> Unit) {
-            scale += 0.05f * dir
+            scale += 0.1f * dir
             if (Math.abs(scale - prevScale) > 1) {
                 scale = prevScale + dir
                 dir = 0f
